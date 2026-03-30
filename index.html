@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Thoughts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000000; /* أسود كامل */
+            color: #ffffff;
+            font-family: 'Inter', 'Cairo', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+            line-height: 1.6;
+        }
+
+        /* رأس الصفحة - اسمك */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .header h1 {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: #888;
+            text-transform: uppercase;
+        }
+
+        /* حاوية النصوص */
+        .feed {
+            width: 100%;
+            max-width: 500px; /* حجم أصغر وأرتب للموبايل */
+        }
+
+        /* البلوك الخاص بكل جملة */
+        .post {
+            background: #0a0a0a; /* لون رمادي خفيف جداً عشان يبين البلوك */
+            border: 1px solid #1a1a1a;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            transition: 0.3s;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .post:hover {
+            border-color: #333;
+            background: #111;
+        }
+
+        /* تنسيق النص داخل البلوك */
+        .post-text {
+            font-size: 1.1rem;
+            word-wrap: break-word;
+            white-space: pre-wrap; /* بحافظ على الفراغات والأسطر اللي بتعملها */
+            direction: auto; /* هاد السحر: بحدد الاتجاه حسب اللغة اللي بتكتبها */
+            text-align: start;
+        }
+
+        .post-date {
+            font-size: 0.7rem;
+            color: #444;
+            margin-top: 15px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* إخفاء السكرول بار لشكل أنظف */
+        ::-webkit-scrollbar { width: 0px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>ZAID KHABBAS</h1>
+    </div>
+
+    <div class="feed">
+
+    
+
+        <div class="post">
+            <div class="post-text"></div>
+            <span class="post-date">MAR 31, 2026</span>
+        </div>
+
+        <div class="post">
+            <div class="post-text">....</div>
+            <span class="post-date">MAR 30, 2026</span>
+        </div>
+
+        </div>
+
+</body>
+</html>
