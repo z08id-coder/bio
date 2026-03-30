@@ -1,105 +1,146 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Thoughts</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>Zaid & Friends</title>
     <style>
+        /* الأساسيات */
         body {
-            background-color: #000000; /* أسود كامل */
-            color: #ffffff;
-            font-family: 'Inter', 'Cairo', sans-serif;
+            background-color: #0d1117; /* أسود هادئ (نظام جيت هاب) */
+            color: #c9d1d9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 50px 20px;
-            line-height: 1.6;
+            padding: 20px;
         }
 
-        /* رأس الصفحة - اسمك */
-        .header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        .header h1 {
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            color: #888;
-            text-transform: uppercase;
-        }
-
-        /* حاوية النصوص */
-        .feed {
+        .container {
+            max-width: 500px;
             width: 100%;
-            max-width: 500px; /* حجم أصغر وأرتب للموبايل */
         }
 
-        /* البلوك الخاص بكل جملة */
+        /* الهيدر (رأس الصفحة) */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            margin-top: 20px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+
+        /* تنسيق المنشور (Post) */
         .post {
-            background: #0a0a0a; /* لون رمادي خفيف جداً عشان يبين البلوك */
-            border: 1px solid #1a1a1a;
-            padding: 25px;
-            margin-bottom: 20px;
+            background-color: #161b22;
+            border: 1px solid #30363d;
             border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
             transition: 0.3s;
-            animation: fadeIn 0.8s ease forwards;
         }
 
         .post:hover {
-            border-color: #333;
-            background: #111;
+            border-color: #58a6ff; /* توهج أزرق خفيف عند اللمس */
         }
 
-        /* تنسيق النص داخل البلوك */
-        .post-text {
-            font-size: 1.1rem;
-            word-wrap: break-word;
-            white-space: pre-wrap; /* بحافظ على الفراغات والأسطر اللي بتعملها */
-            direction: auto; /* هاد السحر: بحدد الاتجاه حسب اللغة اللي بتكتبها */
-            text-align: start;
+        /* تنسيق الأفاتار والاسم */
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover; /* هاد السطر اللي بحل مشكلة القياسات */
+            border: 2px solid #30363d;
+            background-color: #0d1117;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: bold;
+            color: #f0f6fc;
+            font-size: 1rem;
         }
 
         .post-date {
-            font-size: 0.7rem;
-            color: #444;
-            margin-top: 15px;
-            display: block;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 0.75rem;
+            color: #8b949e;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* نص المنشور */
+        .post-text {
+            line-height: 1.6;
+            font-size: 1.05rem;
+            color: #e6edf3;
+            white-space: pre-wrap; /* عشان يحافظ على الفراغات والأسطر */
         }
 
-        /* إخفاء السكرول بار لشكل أنظف */
-        ::-webkit-scrollbar { width: 0px; }
+        /* الفوتر */
+        footer {
+            margin-top: 50px;
+            font-size: 0.8rem;
+            color: #484f58;
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>ZAID KHABBAS</h1>
+    <div class="container">
+        <header>
+            <h1>Zaid & Friends</h1>
+            <p>مساحة خاصة للأفكار والذكريات</p>
+        </header>
+
+        <div class="post">
+            <div class="post-header">
+                <img src="https://via.placeholder.com/150" class="avatar" alt="Zaid">
+                <div class="author-info">
+                    <span class="author-name">Zaid</span>
+                    <span class="post-date">اليوم، 12:45 AM</span>
+                </div>
+            </div>
+            <div class="post-text">
+                أهلاً بك في موقعي الجديد.. هان بدأت الرحلة. 🚀
+            </div>
+        </div>
+        <div class="post">
+            <div class="post-header">
+                <img src="https://via.placeholder.com/150" class="avatar" alt="Friend">
+                <div class="author-info">
+                    <span class="author-name">صديق 1</span>
+                    <span class="post-date">Mar 30, 2026</span>
+                </div>
+            </div>
+            <div class="post-text">
+                جملة عميقة من أحد الأصدقاء هنا..
+            </div>
+        </div>
+
     </div>
 
-    <div class="feed">
-
-    
-
-        <div class="post">
-            <div class="post-text"></div>
-            <span class="post-date">MAR 31, 2026</span>
-        </div>
-
-        <div class="post">
-            <div class="post-text">....</div>
-            <span class="post-date">MAR 30, 2026</span>
-        </div>
-
-        </div>
+    <footer>
+        © 2026 Zaid & Friends - Built with passion
+    </footer>
 
 </body>
 </html>
