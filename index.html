@@ -87,7 +87,6 @@
             white-space: pre-wrap;
         }
 
-        /* تنسيق الصور المرفوعة من اللوحة */
         .post-image {
             width: 100%;
             border-radius: 8px;
@@ -116,39 +115,6 @@
         </header>
 
         <div id="posts-container">
-            <div class="post">
-                <div class="post-header">
-                    <img src="mottazpfp.jpg" class="avatar" alt="motaz">
-                    <div class="author-info">
-                        <span class="author-name">motaz</span>
-                        <span class="post-date">31/3/2026</span>
-                    </div>
-                </div>
-                <div class="post-text">devil</div>
-            </div>
-            
-            <div class="post">
-                <div class="post-header">
-                    <img src="ownpfp.jpeg" class="avatar" alt="owen">
-                    <div class="author-info">
-                        <span class="author-name">owen</span>
-                        <span class="post-date">3/31/2026</span>
-                    </div>
-                </div>
-                <div class="post-text">Fuck society</div>
-            </div>
-
-            <div class="post">
-                <div class="post-header">
-                    <img src="zaidpfp.jpeg" class="avatar" alt="zaid">
-                    <div class="author-info">
-                        <span class="author-name">zaid</span>
-                        <span class="post-date">Mar 30, 2026</span>
-                    </div>
-                </div>
-                <div class="post-text">يخلف عل كودر بس</div>
-            </div>
-
             <div id="dynamic-posts">
                 <p id="loading-msg">جاري تحميل منشورات الأصدقاء الجديدة...</p>
             </div>
@@ -160,7 +126,6 @@
     </footer>
 
     <script>
-        // كود جلب المنشورات من GitHub تلقائياً
         async function fetchDynamicPosts() {
             const dynamicContainer = document.getElementById('dynamic-posts');
             const repoOwner = "z08id-coder"; 
@@ -170,29 +135,29 @@
             try {
                 const response = await fetch(apiUrl);
                 if (!response.ok) throw new Error();
-                const files = await response.json();
+                let files = await response.json();
                 
-                // مسح رسالة التحميل
                 dynamicContainer.innerHTML = "";
 
-                // ترتيب الملفات من الأحدث للأقدم
-                files.reverse();
+                // الترتيب: الأحدث أولاً بناءً على اسم الملف
+                files.sort((a, b) => b.name.localeCompare(a.name));
 
                 for (const file of files) {
                     if (file.name.endsWith(".md")) {
                         const postRes = await fetch(file.download_url);
                         const content = await postRes.text();
 
-                        // استخراج البيانات (Metadata) من ملف الـ Markdown
+                        // استخراج البيانات من الـ Frontmatter
                         const title = content.match(/title: "(.*)"/)?.[1] || content.match(/title: (.*)/)?.[1];
                         const date = content.match(/date: (.*)/)?.[1];
-                        const image = content.match(/image: (.*)/)?.[1];
+                        const avatar = content.match(/avatar: (.*)/)?.[1]; // سحب الأفاتار الجديد
+                        const image = content.match(/image: (.*)/)?.[1];   // سحب صورة البوست
                         const body = content.split("---").pop().trim();
 
-                        // بناء هيكل البوست بنفس تصميمك
                         const postHtml = `
                             <div class="post">
                                 <div class="post-header">
+                                    <img src="${avatar || 'zaidpfp.jpeg'}" class="avatar" alt="pfp">
                                     <div class="author-info">
                                         <span class="author-name">${title}</span>
                                         <span class="post-date">${date || ""}</span>
@@ -207,14 +172,12 @@
                 }
             } catch (error) {
                 console.error("Error loading posts:", error);
-                document.getElementById('loading-msg').innerText = "";
+                if(document.getElementById('loading-msg')) document.getElementById('loading-msg').innerText = "فشل تحميل المنشورات.";
             }
         }
 
-        // تشغيل الدالة عند فتح الصفحة
         fetchDynamicPosts();
 
-        // كود Netlify Identity
         if (window.netlifyIdentity) {
             window.netlifyIdentity.on("init", user => {
                 if (!user) {
