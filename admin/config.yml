@@ -2,6 +2,9 @@ backend:
   name: github
   repo: z08id-coder/bio
   branch: main
+  # السطرين الجايين هم "مفتاح الحل" لمشكلة الـ Not Found
+  base_url: https://z08id-coder.github.io/bio/
+  auth_endpoint: https://static-cms-auth.vercel.app/api/auth
 
 media_folder: "images"
 public_folder: "images"
@@ -12,12 +15,12 @@ collections:
     folder: "_posts"
     create: true
     delete: true
-    # الترتيب التلقائي بناءً على وقت النشر بالثانية لضمان ظهور الأحدث فوق
+    # الترتيب التلقائي بناءً على وقت النشر
     slug: "{{year}}-{{month}}-{{day}}-{{hour}}-{{minute}}-{{slug}}"
     fields:
       - {label: "اسم الشخص", name: "title", widget: "string"}
       
-      # التاريخ مخفي ويؤخذ تلقائياً لحظة الضغط على Publish
+      # التاريخ مخفي ويؤخذ تلقائياً
       - {
           label: "التاريخ", 
           name: "date", 
@@ -25,7 +28,7 @@ collections:
           default: "{{now}}"
         }
 
-      # حقل الأفاتار (الصورة الدائرية)
+      # حقل الأفاتار
       - {label: "الأفاتار (صورة الشخص)", name: "avatar", widget: "image", required: true}
       
       # حقل صورة المنشور (اختياري)
