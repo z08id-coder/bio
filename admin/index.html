@@ -7,16 +7,39 @@
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  
   <script>
-    // هاد الكود بيجبر اللوحة تستخدم البوابة الخارجية غصب عنها
-    window.CMS_CONFIG = {
-      backend: {
-        name: 'github',
-        repo: 'z08id-coder/bio',
-        branch: 'main',
-        auth_endpoint: 'https://static-cms-auth.vercel.app/api/auth'
+    // إعدادات اللوحة المباشرة (Embedded Config)
+    // هاي الحركة بتخلي اللوحة تطنش ملف الـ config.yml وتشتغل من هون فوراً
+    CMS.init({
+      config: {
+        backend: {
+          name: 'github',
+          repo: 'z08id-coder/bio',
+          branch: 'main',
+          auth_endpoint: 'https://static-cms-auth.vercel.app/api/auth'
+        },
+        media_folder: 'images',
+        public_folder: 'images',
+        collections: [
+          {
+            name: 'posts',
+            label: 'البوستات',
+            folder: '_posts',
+            create: true,
+            delete: true,
+            slug: '{{year}}-{{month}}-{{day}}-{{hour}}-{{minute}}-{{slug}}',
+            fields: [
+              { label: 'اسم الشخص', name: 'title', widget: 'string' },
+              { label: 'التاريخ', name: 'date', widget: 'hidden', default: '{{now}}' },
+              { label: 'الأفاتار', name: 'avatar', widget: 'image' },
+              { label: 'صورة البوست', name: 'image', widget: 'image', required: false },
+              { label: 'نص المنشور', name: 'body', widget: 'markdown' }
+            ]
+          }
+        ]
       }
-    };
+    });
   </script>
 </body>
 </html>
