@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zaid & Friends</title>
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <style>
         /* الأساسيات */
         body {
@@ -137,7 +136,7 @@
                 if (!response.ok) throw new Error();
                 let files = await response.json();
                 
-                // الترتيب الأبجدي العكسي لأسماء الملفات (الأحدث فوق تلقائياً)
+                // الترتيب الأحدث فوق: بنرتب الملفات أبجدياً عكسياً (بناءً على تاريخ التسمية)
                 files.sort((a, b) => b.name.localeCompare(a.name));
 
                 dynamicContainer.innerHTML = ""; 
@@ -147,10 +146,13 @@
                         const postRes = await fetch(file.download_url);
                         const content = await postRes.text();
                         
+                        // استخراج البيانات باستخدام Regex
                         const title = content.match(/title: "(.*)"/)?.[1] || content.match(/title: (.*)/)?.[1];
                         const dateStr = content.match(/date: (.*)/)?.[1];
                         const avatar = content.match(/avatar: (.*)/)?.[1];
                         const image = content.match(/image: (.*)/)?.[1];
+                        
+                        // فصل المحتوى (Body) عن الـ Front Matter
                         const body = content.split("---").pop().trim();
 
                         const postHtml = `
@@ -158,7 +160,7 @@
                                 <div class="post-header">
                                     <img src="${avatar || 'zaidpfp.jpeg'}" class="avatar" alt="pfp">
                                     <div class="author-info">
-                                        <span class="author-name">${title}</span>
+                                        <span class="author-name">${title || "صديق"}</span>
                                         <span class="post-date">${dateStr ? dateStr.split('T')[0] : ""}</span>
                                     </div>
                                 </div>
@@ -176,17 +178,8 @@
             }
         }
 
+        // تشغيل الدالة فور تحميل الصفحة
         fetchDynamicPosts();
-
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.on("init", user => {
-                if (!user) {
-                    window.netlifyIdentity.on("login", () => {
-                        document.location.href = "/admin/";
-                    });
-                }
-            });
-        }
     </script>
 </body>
 </html>
