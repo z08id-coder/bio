@@ -9,7 +9,7 @@
         .container { max-width: 500px; width: 100%; }
         header { text-align: center; margin-bottom: 40px; margin-top: 20px; }
         header h1 { font-size: 1.8rem; color: #ffffff; margin-bottom: 5px; }
-        .post { background-color: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 20px; transition: 0.3s; position: relative; }
+        .post { background-color: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 20px; transition: 0.3s; }
         .post:hover { border-color: #58a6ff; }
         .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
         .avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #30363d; background-color: #0d1117; }
@@ -19,7 +19,7 @@
         .post-text { line-height: 1.6; font-size: 1.05rem; color: #e6edf3; white-space: pre-wrap; }
         .post-image { width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid #30363d; }
         footer { margin-top: 50px; font-size: 0.8rem; color: #484f58; }
-        #loading-msg { text-align: center; color: #8b949e; font-size: 0.9rem; }
+        #loading-msg { text-align: center; color: #8b949e; }
     </style>
 </head>
 <body>
@@ -28,9 +28,8 @@
         <header>
             <h1>Zaid & Friends</h1>
         </header>
-
         <div id="dynamic-posts">
-            <p id="loading-msg">جاري تحميل المنشورات وتنسيق الصور...</p>
+            <p id="loading-msg">جاري تحميل المنشورات وتصحيح التوقيت...</p>
         </div>
     </div>
 
@@ -51,29 +50,31 @@
                     const postRes = await fetch(file.download_url);
                     const content = await postRes.text();
                     
-                    // استخراج البيانات بتنظيف دقيق للرموز الزائدة
-                    const titleMatch = content.match(/title:\s*["']?(.*?)["']?(\r?\n|$)/);
-                    const dateMatch = content.match(/date:\s*(.*?)(\r?\n|$)/);
-                    const avatarMatch = content.match(/avatar:\s*(.*?)(\r?\n|$)/);
-                    const imageMatch = content.match(/image:\s*(.*?)(\r?\n|$)/);
-                    
-                    const title = titleMatch ? titleMatch[1].trim() : "صديق";
-                    const dateStr = dateMatch ? dateMatch[1].trim() : "";
-                    const avatar = avatarMatch ? avatarMatch[1].trim() : 'zaidpfp.jpeg';
-                    const image = imageMatch ? imageMatch[1].trim() : null;
+                    const title = (content.match(/title:\s*["']?(.*?)["']?(\r?\n|$)/))?.[1] || "صديق";
+                    let dateStr = (content.match(/date:\s*(.*?)(\r?\n|$)/))?.[1] || "";
+                    const avatar = (content.match(/avatar:\s*(.*?)(\r?\n|$)/))?.[1] || 'zaidpfp.jpeg';
+                    const image = (content.match(/image:\s*(.*?)(\r?\n|$)/))?.[1] || null;
                     const body = content.split("---").pop().trim();
 
+                    // حل مشكلة {{now}} أو التواريخ المفقودة
+                    let finalDate;
+                    if (!dateStr || dateStr.includes("{{now}}")) {
+                        finalDate = new Date(); // استخدم تاريخ اللحظة إذا كان التوقيت غير معروف
+                    } else {
+                        finalDate = new Date(dateStr);
+                    }
+
                     postsData.push({
-                        title,
-                        date: dateStr ? new Date(dateStr) : new Date(0),
-                        dateDisplay: dateStr.includes('T') ? dateStr.split('T')[0] : dateStr,
-                        avatar,
-                        image,
+                        title: title.trim(),
+                        date: finalDate,
+                        dateDisplay: finalDate.toLocaleString('ar-EG', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
+                        avatar: avatar.trim(),
+                        image: image ? image.trim() : null,
                         body
                     });
                 }
 
-                // الترتيب: الأحدث فوق (حسب التاريخ)
+                // الترتيب: الأحدث فوق
                 postsData.sort((a, b) => b.date - a.date);
 
                 dynamicContainer.innerHTML = ""; 
@@ -88,7 +89,7 @@
                                 </div>
                             </div>
                             <div class="post-text">${post.body}</div>
-                            ${post.image ? `<img src="${post.image}" class="post-image" alt="post content">` : ""}
+                            ${post.image ? `<img src="${post.image}" class="post-image">` : ""}
                         </div>
                     `;
                     dynamicContainer.innerHTML += postHtml;
@@ -99,7 +100,6 @@
                 document.getElementById('loading-msg').innerText = "فشل تحميل المنشورات.";
             }
         }
-
         fetchDynamicPosts();
     </script>
 </body>
