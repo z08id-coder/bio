@@ -1,5 +1,5 @@
 backend:
-  name: git-gateway
+  name: github
   repo: z08id-coder/bio
   branch: main
 
@@ -12,12 +12,12 @@ collections:
     folder: "_posts"
     create: true
     delete: true
-    # التعديل هنا لضمان تسمية الملفات بالتاريخ والوقت بدقة للترتيب التلقائي
+    # الترتيب التلقائي بناءً على وقت النشر بالثانية لضمان ظهور الأحدث فوق
     slug: "{{year}}-{{month}}-{{day}}-{{hour}}-{{minute}}-{{slug}}"
     fields:
       - {label: "اسم الشخص", name: "title", widget: "string"}
       
-      # التعديل الجوهري: التاريخ صار مخفي (hidden) وبياخد الوقت الحالي تلقائياً
+      # التاريخ مخفي ويؤخذ تلقائياً لحظة الضغط على Publish
       - {
           label: "التاريخ", 
           name: "date", 
@@ -25,7 +25,7 @@ collections:
           default: "{{now}}"
         }
 
-      # حقل الأفاتار (الصورة الدائرية اللي جنب الاسم)
+      # حقل الأفاتار (الصورة الدائرية)
       - {label: "الأفاتار (صورة الشخص)", name: "avatar", widget: "image", required: true}
       
       # حقل صورة المنشور (اختياري)
