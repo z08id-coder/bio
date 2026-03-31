@@ -3,7 +3,8 @@ backend:
   repo: z08id-coder/bio
   branch: main
   auth_endpoint: https://static-cms-auth.vercel.app/api/auth
-
+  app_id: "3234424"
+  app_secret: "Iv23lil0WCl5vsvGE6p9"
 media_folder: "images"
 public_folder: "images"
 
