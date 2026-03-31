@@ -11,6 +11,7 @@ collections:
     label: "البوستات"
     folder: "_posts"
     create: true
+    delete: true # هاد السطر بخليك تحذف أي بوست بدك ياه من اللوحة
     fields:
       - {label: "اسم الشخص", name: "title", widget: "string"}
       - {
@@ -22,8 +23,8 @@ collections:
           format: "YYYY-MM-DD hh:mm A",
           picker_utc: false
         }
-      # حقل الأفاتار (الصورة الدائرية بجانب الاسم)
+      # حقل الأفاتار (الصورة الدائرية اللي جنب الاسم)
       - {label: "الأفاتار (صورة الشخص)", name: "avatar", widget: "image", required: true}
-      # حقل صورة المنشور (اختيارية)
+      # حقل صورة المنشور (بتصير اختيارية زي ما طلبت)
       - {label: "صورة البوست (اختياري)", name: "image", widget: "image", required: false}
       - {label: "نص المنشور", name: "body", widget: "markdown"}
