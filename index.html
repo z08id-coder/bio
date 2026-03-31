@@ -5,105 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zaid & Friends</title>
     <style>
-        /* الأساسيات والتنسيق */
-        body {
-            background-color: #0d1117;
-            color: #c9d1d9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 500px;
-            width: 100%;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            margin-top: 20px;
-        }
-
-        header h1 {
-            font-size: 1.8rem;
-            color: #ffffff;
-            margin-bottom: 5px;
-        }
-
-        .post {
-            background-color: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: 0.3s;
-        }
-
-        .post:hover {
-            border-color: #58a6ff;
-        }
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #30363d;
-            background-color: #0d1117;
-        }
-
-        .author-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .author-name {
-            font-weight: bold;
-            color: #f0f6fc;
-            font-size: 1rem;
-        }
-
-        .post-date {
-            font-size: 0.75rem;
-            color: #8b949e;
-        }
-
-        .post-text {
-            line-height: 1.6;
-            font-size: 1.05rem;
-            color: #e6edf3;
-            white-space: pre-wrap;
-        }
-
-        .post-image {
-            width: 100%;
-            border-radius: 8px;
-            margin-top: 15px;
-            border: 1px solid #30363d;
-        }
-
-        footer {
-            margin-top: 50px;
-            font-size: 0.8rem;
-            color: #484f58;
-        }
-        
-        #loading-msg {
-            text-align: center;
-            color: #8b949e;
-            font-size: 0.9rem;
-        }
+        body { background-color: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .container { max-width: 500px; width: 100%; }
+        header { text-align: center; margin-bottom: 40px; margin-top: 20px; }
+        header h1 { font-size: 1.8rem; color: #ffffff; margin-bottom: 5px; }
+        .post { background-color: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 20px; transition: 0.3s; position: relative; }
+        .post:hover { border-color: #58a6ff; }
+        .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #30363d; background-color: #0d1117; }
+        .author-info { display: flex; flex-direction: column; }
+        .author-name { font-weight: bold; color: #f0f6fc; font-size: 1rem; }
+        .post-date { font-size: 0.75rem; color: #8b949e; }
+        .post-text { line-height: 1.6; font-size: 1.05rem; color: #e6edf3; white-space: pre-wrap; }
+        .post-image { width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid #30363d; }
+        footer { margin-top: 50px; font-size: 0.8rem; color: #484f58; }
+        #loading-msg { text-align: center; color: #8b949e; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -113,44 +29,35 @@
             <h1>Zaid & Friends</h1>
         </header>
 
-        <div id="posts-container">
-            <div id="dynamic-posts">
-                <p id="loading-msg">جاري تحميل منشورات الأصدقاء حسب التاريخ...</p>
-            </div>
+        <div id="dynamic-posts">
+            <p id="loading-msg">جاري تحميل المنشورات وتنسيق الصور...</p>
         </div>
     </div>
 
-    <footer>
-        © 2026 from zaid
-    </footer>
+    <footer> © 2026 from zaid </footer>
 
     <script>
         async function fetchDynamicPosts() {
             const dynamicContainer = document.getElementById('dynamic-posts');
-            const repoOwner = "z08id-coder"; 
-            const repoName = "bio";
-            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/_posts`;
+            const apiUrl = `https://api.github.com/repos/z08id-coder/bio/contents/_posts`;
 
             try {
                 const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error("Failed to fetch files");
                 const files = await response.json();
-                
                 const mdFiles = files.filter(f => f.name.endsWith(".md"));
                 let postsData = [];
 
-                // 1. جلب محتوى كل الملفات وتخزين بياناتها
                 for (const file of mdFiles) {
                     const postRes = await fetch(file.download_url);
                     const content = await postRes.text();
                     
-                    // استخراج البيانات باستخدام Regex
-                    const titleMatch = content.match(/title: "(.*)"/) || content.match(/title: (.*)/);
-                    const dateMatch = content.match(/date: (.*)/);
-                    const avatarMatch = content.match(/avatar: (.*)/);
-                    const imageMatch = content.match(/image: (.*)/);
+                    // استخراج البيانات بتنظيف دقيق للرموز الزائدة
+                    const titleMatch = content.match(/title:\s*["']?(.*?)["']?(\r?\n|$)/);
+                    const dateMatch = content.match(/date:\s*(.*?)(\r?\n|$)/);
+                    const avatarMatch = content.match(/avatar:\s*(.*?)(\r?\n|$)/);
+                    const imageMatch = content.match(/image:\s*(.*?)(\r?\n|$)/);
                     
-                    const title = titleMatch ? titleMatch[1].replace(/"/g, '') : "صديق";
+                    const title = titleMatch ? titleMatch[1].trim() : "صديق";
                     const dateStr = dateMatch ? dateMatch[1].trim() : "";
                     const avatar = avatarMatch ? avatarMatch[1].trim() : 'zaidpfp.jpeg';
                     const image = imageMatch ? imageMatch[1].trim() : null;
@@ -158,37 +65,30 @@
 
                     postsData.push({
                         title,
-                        date: dateStr ? new Date(dateStr) : new Date(0), // تحويل لنوع تاريخ للمقارنة
-                        dateDisplay: dateStr ? dateStr.split('T')[0] : "",
+                        date: dateStr ? new Date(dateStr) : new Date(0),
+                        dateDisplay: dateStr.includes('T') ? dateStr.split('T')[0] : dateStr,
                         avatar,
                         image,
                         body
                     });
                 }
 
-                // 2. الترتيب الحقيقي حسب التاريخ (الأحدث أولاً)
+                // الترتيب: الأحدث فوق (حسب التاريخ)
                 postsData.sort((a, b) => b.date - a.date);
 
-                // 3. مسح رسالة التحميل وعرض البوستات مرتبة
                 dynamicContainer.innerHTML = ""; 
-                
-                if (postsData.length === 0) {
-                    dynamicContainer.innerHTML = "<p id='loading-msg'>لا توجد منشورات حالياً.</p>";
-                    return;
-                }
-
                 postsData.forEach(post => {
                     const postHtml = `
                         <div class="post">
                             <div class="post-header">
-                                <img src="${post.avatar}" class="avatar" alt="pfp">
+                                <img src="${post.avatar}" class="avatar" onerror="this.src='zaidpfp.jpeg'">
                                 <div class="author-info">
                                     <span class="author-name">${post.title}</span>
                                     <span class="post-date">${post.dateDisplay}</span>
                                 </div>
                             </div>
                             <div class="post-text">${post.body}</div>
-                            ${post.image ? `<img src="${post.image}" class="post-image" alt="post image">` : ""}
+                            ${post.image ? `<img src="${post.image}" class="post-image" alt="post content">` : ""}
                         </div>
                     `;
                     dynamicContainer.innerHTML += postHtml;
@@ -196,12 +96,10 @@
 
             } catch (error) {
                 console.error("Error:", error);
-                if(document.getElementById('loading-msg')) 
-                    document.getElementById('loading-msg').innerText = "فشل تحميل المنشورات.";
+                document.getElementById('loading-msg').innerText = "فشل تحميل المنشورات.";
             }
         }
 
-        // تشغيل العملية
         fetchDynamicPosts();
     </script>
 </body>
