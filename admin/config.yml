@@ -2,8 +2,8 @@ backend:
   name: github
   repo: z08id-coder/bio
   branch: main
-  # هاد السطر هو اللي رح يحل المشكلة، ممنوع يكون قبله api.netlify
-  auth_endpoint: https://static-cms-auth.vercel.app/api/auth
+  base_url: https://static-cms-auth.vercel.app
+  auth_endpoint: /api/auth
   app_id: "3234424"
   app_secret: "3fd7294d13874456b5c3435682dde76a46ed6f2d"
 
