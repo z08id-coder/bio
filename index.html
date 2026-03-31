@@ -35,11 +35,6 @@
             margin-bottom: 5px;
         }
 
-        header p {
-            font-size: 0.9rem;
-            color: #8b949e;
-        }
-
         .post {
             background-color: #161b22;
             border: 1px solid #30363d;
@@ -92,10 +87,24 @@
             white-space: pre-wrap;
         }
 
+        /* تنسيق الصور المرفوعة من اللوحة */
+        .post-image {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #30363d;
+        }
+
         footer {
             margin-top: 50px;
             font-size: 0.8rem;
             color: #484f58;
+        }
+        
+        #loading-msg {
+            text-align: center;
+            color: #8b949e;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -109,7 +118,7 @@
         <div id="posts-container">
             <div class="post">
                 <div class="post-header">
-                    <img src="mottazpfp.jpg" class="avatar" alt="الاسم">
+                    <img src="mottazpfp.jpg" class="avatar" alt="motaz">
                     <div class="author-info">
                         <span class="author-name">motaz</span>
                         <span class="post-date">31/3/2026</span>
@@ -120,7 +129,7 @@
             
             <div class="post">
                 <div class="post-header">
-                    <img src="ownpfp.jpeg" class="avatar" alt="الاسم">
+                    <img src="ownpfp.jpeg" class="avatar" alt="owen">
                     <div class="author-info">
                         <span class="author-name">owen</span>
                         <span class="post-date">3/31/2026</span>
@@ -131,13 +140,17 @@
 
             <div class="post">
                 <div class="post-header">
-                    <img src="zaidpfp.jpeg" class="avatar" alt="Friend">
+                    <img src="zaidpfp.jpeg" class="avatar" alt="zaid">
                     <div class="author-info">
                         <span class="author-name">zaid</span>
                         <span class="post-date">Mar 30, 2026</span>
                     </div>
                 </div>
                 <div class="post-text">يخلف عل كودر بس</div>
+            </div>
+
+            <div id="dynamic-posts">
+                <p id="loading-msg">جاري تحميل منشورات الأصدقاء الجديدة...</p>
             </div>
         </div>
     </div>
@@ -147,15 +160,70 @@
     </footer>
 
     <script>
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", user => {
-          if (!user) {
-            window.netlifyIdentity.on("login", () => {
-              document.location.href = "/admin/";
+        // كود جلب المنشورات من GitHub تلقائياً
+        async function fetchDynamicPosts() {
+            const dynamicContainer = document.getElementById('dynamic-posts');
+            const repoOwner = "z08id-coder"; 
+            const repoName = "bio";
+            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/_posts`;
+
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error();
+                const files = await response.json();
+                
+                // مسح رسالة التحميل
+                dynamicContainer.innerHTML = "";
+
+                // ترتيب الملفات من الأحدث للأقدم
+                files.reverse();
+
+                for (const file of files) {
+                    if (file.name.endsWith(".md")) {
+                        const postRes = await fetch(file.download_url);
+                        const content = await postRes.text();
+
+                        // استخراج البيانات (Metadata) من ملف الـ Markdown
+                        const title = content.match(/title: "(.*)"/)?.[1] || content.match(/title: (.*)/)?.[1];
+                        const date = content.match(/date: (.*)/)?.[1];
+                        const image = content.match(/image: (.*)/)?.[1];
+                        const body = content.split("---").pop().trim();
+
+                        // بناء هيكل البوست بنفس تصميمك
+                        const postHtml = `
+                            <div class="post">
+                                <div class="post-header">
+                                    <div class="author-info">
+                                        <span class="author-name">${title}</span>
+                                        <span class="post-date">${date || ""}</span>
+                                    </div>
+                                </div>
+                                <div class="post-text">${body}</div>
+                                ${image ? `<img src="${image}" class="post-image" alt="post image">` : ""}
+                            </div>
+                        `;
+                        dynamicContainer.innerHTML += postHtml;
+                    }
+                }
+            } catch (error) {
+                console.error("Error loading posts:", error);
+                document.getElementById('loading-msg').innerText = "";
+            }
+        }
+
+        // تشغيل الدالة عند فتح الصفحة
+        fetchDynamicPosts();
+
+        // كود Netlify Identity
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                        document.location.href = "/admin/";
+                    });
+                }
             });
-          }
-        });
-      }
+        }
     </script>
 </body>
 </html>
