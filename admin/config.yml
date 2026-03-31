@@ -2,7 +2,6 @@ backend:
   name: github
   repo: z08id-coder/bio
   branch: main
-  # استبدلنا الرابطين برابط واحد مباشر وصريح للبوابة
   auth_endpoint: https://static-cms-auth.vercel.app/api/auth
 
 media_folder: "images"
