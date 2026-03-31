@@ -1,0 +1,18 @@
+backend:
+  name: github
+  repo: z08id-coder/bio # تأكد أن هذا هو اسم حسابك والمستودع الصحيح
+  branch: main
+
+media_folder: "images" # الصور التي ترفعها ستخزن هنا
+public_folder: "images"
+
+collections:
+  - name: "posts"
+    label: "البوستات"
+    folder: "_posts" # هنا سيتم تخزين النصوص
+    create: true
+    fields:
+      - {label: "اسم الشخص", name: "title", widget: "string"}
+      - {label: "التاريخ", name: "date", widget: "datetime"}
+      - {label: "الصورة الشخصية", name: "image", widget: "image"}
+      - {label: "نص المنشور", name: "body", widget: "markdown"}
