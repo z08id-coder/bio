@@ -2,8 +2,7 @@ backend:
   name: github
   repo: z08id-coder/bio
   branch: main
-  # التعديل الجوهري هون: شلنا الفواصل الزيادة وضبطنا الروابط
-  base_url: https://z08id-coder.github.io
+  # استبدلنا الرابطين برابط واحد مباشر وصريح للبوابة
   auth_endpoint: https://static-cms-auth.vercel.app/api/auth
 
 media_folder: "images"
@@ -18,16 +17,7 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{hour}}-{{minute}}-{{slug}}"
     fields:
       - {label: "اسم الشخص", name: "title", widget: "string"}
-      
-      - {
-          label: "التاريخ", 
-          name: "date", 
-          widget: "hidden", 
-          default: "{{now}}"
-        }
-
+      - {label: "التاريخ", name: "date", widget: "hidden", default: "{{now}}"}
       - {label: "الأفاتار (صورة الشخص)", name: "avatar", widget: "image", required: true}
-      
       - {label: "صورة البوست (اختياري)", name: "image", widget: "image", required: false}
-      
       - {label: "نص المنشور", name: "body", widget: "markdown"}
