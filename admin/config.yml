@@ -13,14 +13,13 @@ collections:
     create: true
     fields:
       - {label: "اسم الشخص", name: "title", widget: "string"}
-      # تعديل التاريخ هنا ليظهر بتنسيق بسيط ونظيف
       - {
           label: "التاريخ", 
           name: "date", 
           widget: "datetime", 
           date_format: "DD/MM/YYYY", 
           time_format: "hh:mm A", 
-          format: "YYYY-MM-DD HH:mm",
+          format: "YYYY-MM-DD hh:mm A",
           picker_utc: false
         }
       - {label: "الصورة الشخصية", name: "image", widget: "image"}
