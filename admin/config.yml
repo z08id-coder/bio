@@ -22,5 +22,8 @@ collections:
           format: "YYYY-MM-DD hh:mm A",
           picker_utc: false
         }
-      - {label: "الصورة الشخصية", name: "image", widget: "image"}
+      # حقل الأفاتار (الصورة الدائرية بجانب الاسم)
+      - {label: "الأفاتار (صورة الشخص)", name: "avatar", widget: "image", required: true}
+      # حقل صورة المنشور (اختيارية)
+      - {label: "صورة البوست (اختياري)", name: "image", widget: "image", required: false}
       - {label: "نص المنشور", name: "body", widget: "markdown"}
