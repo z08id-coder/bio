@@ -11,20 +11,24 @@ collections:
     label: "البوستات"
     folder: "_posts"
     create: true
-    delete: true # هاد السطر بخليك تحذف أي بوست بدك ياه من اللوحة
+    delete: true
+    # التعديل هنا لضمان تسمية الملفات بالتاريخ والوقت بدقة للترتيب التلقائي
+    slug: "{{year}}-{{month}}-{{day}}-{{hour}}-{{minute}}-{{slug}}"
     fields:
       - {label: "اسم الشخص", name: "title", widget: "string"}
+      
+      # التعديل الجوهري: التاريخ صار مخفي (hidden) وبياخد الوقت الحالي تلقائياً
       - {
           label: "التاريخ", 
           name: "date", 
-          widget: "datetime", 
-          date_format: "DD/MM/YYYY", 
-          time_format: "hh:mm A", 
-          format: "YYYY-MM-DD hh:mm A",
-          picker_utc: false
+          widget: "hidden", 
+          default: "{{now}}"
         }
+
       # حقل الأفاتار (الصورة الدائرية اللي جنب الاسم)
       - {label: "الأفاتار (صورة الشخص)", name: "avatar", widget: "image", required: true}
-      # حقل صورة المنشور (بتصير اختيارية زي ما طلبت)
+      
+      # حقل صورة المنشور (اختياري)
       - {label: "صورة البوست (اختياري)", name: "image", widget: "image", required: false}
+      
       - {label: "نص المنشور", name: "body", widget: "markdown"}
