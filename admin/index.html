@@ -4,21 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>لوحة تحكم Zaid</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-</head>
+  </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
   <script>
-    // هذا السطر هو الحل: بيجبر اللوحة تفتح نافذة تسجيل الدخول فوراً
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          window.netlifyIdentity.on("login", () => {
-            document.location.href = "/admin/";
-          });
-        }
-      });
-    }
+    // كود إضافي للتأكد من أن اللوحة تعمل مباشرة مع GitHub
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log("Admin Panel is running via GitHub Pages");
+    });
   </script>
 </body>
 </html>
