@@ -10,27 +10,20 @@
     </script>
     
     <meta charset="UTF-8">
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zaid & Friends</title>
     <style>
-         /* تصميم مشغل الموسيقى - ستايل آيفون */
-        #ios-player {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 320px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px; padding: 12px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
-            z-index: 9999; direction: ltr;
+        body { 
+            background-color: #0d1117; 
+            color: #c9d1d9; 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px;
+            padding-bottom: 100px; /* مساحة عشان المشغل ما يغطي آخر بوست */
         }
-        .player-content { display: flex; align-items: center; gap: 12px; }
-        .player-album-art { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
-        .player-info { flex-grow: 1; overflow: hidden; }
-        .player-title { font-weight: 600; font-size: 0.9rem; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .player-sub { font-size: 0.75rem; color: rgba(255, 255, 255, 0.6); }
-        #play-pause-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; }
-        .player-progress-container { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.2); border-radius: 2px; margin-top: 10px; position: relative; }
-        #progress-bar { height: 100%; width: 0%; background: white; border-radius: 2px; }
-        body { background-color: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; padding: 20px; }
         .container { max-width: 500px; width: 100%; }
         header { text-align: center; margin-bottom: 40px; margin-top: 20px; }
         header h1 { font-size: 1.8rem; color: #ffffff; margin-bottom: 5px; }
@@ -43,8 +36,34 @@
         .post-date { font-size: 0.75rem; color: #8b949e; }
         .post-text { line-height: 1.6; font-size: 1.05rem; color: #e6edf3; white-space: pre-wrap; }
         .post-image { width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid #30363d; }
-        footer { margin-top: 50px; font-size: 0.8rem; color: #484f58; }
+        footer { margin-top: 50px; font-size: 0.8rem; color: #484f58; text-align: center; }
         #loading-msg { text-align: center; color: #8b949e; }
+
+        /* تصميم مشغل الموسيقى - ستايل آيفون ثابت */
+        #ios-player {
+            position: fixed; 
+            bottom: 20px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            width: 320px; 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px; 
+            padding: 12px; 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+            z-index: 9999; 
+            direction: ltr;
+        }
+        .player-content { display: flex; align-items: center; gap: 12px; }
+        .player-album-art { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
+        .player-info { flex-grow: 1; overflow: hidden; }
+        .player-title { font-weight: 600; font-size: 0.9rem; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .player-sub { font-size: 0.75rem; color: rgba(255, 255, 255, 0.6); }
+        #play-pause-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; }
+        .player-progress-container { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.2); border-radius: 2px; margin-top: 10px; position: relative; }
+        #progress-bar { height: 100%; width: 0%; background: white; border-radius: 2px; transition: width 0.1s linear; }
     </style>
 </head>
 <body>
@@ -60,72 +79,97 @@
 
     <footer> © 2026 from zaid </footer>
 
+    <div id="ios-player">
+        <div class="player-content">
+            <img src="zaidpfp.jpeg" class="player-album-art" onerror="this.src='https://via.placeholder.com/45'">
+            <div class="player-info">
+                <div class="player-title">Zaid & Friends Beat</div>
+                <div class="player-sub">Playing Now</div>
+            </div>
+            <button id="play-pause-btn">▶</button>
+        </div>
+        <div class="player-progress-container">
+            <div id="progress-bar"></div>
+        </div>
+    </div>
+
+    <audio id="background-audio" loop>
+        <source src="beat.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
+        // دالة جلب البوستات
         async function fetchDynamicPosts() {
             const dynamicContainer = document.getElementById('dynamic-posts');
             const apiUrl = `https://api.github.com/repos/z08id-coder/bio/contents/_posts`;
-
             try {
                 const response = await fetch(apiUrl);
                 const files = await response.json();
-                const mdFiles = files.filter(f => f.name.endsWith(".md"));
-                let postsData = [];
-
-                for (const file of mdFiles) {
-                    const postRes = await fetch(file.download_url);
-                    const content = await postRes.text();
-                    
-                    const title = (content.match(/title:\s*["']?(.*?)["']?(\r?\n|$)/))?.[1] || "صديق";
-                    let dateStr = (content.match(/date:\s*(.*?)(\r?\n|$)/))?.[1] || "";
-                    const avatar = (content.match(/avatar:\s*(.*?)(\r?\n|$)/))?.[1] || 'zaidpfp.jpeg';
-                    const image = (content.match(/image:\s*(.*?)(\r?\n|$)/))?.[1] || null;
-                    const body = content.split("---").pop().trim();
-
-                    // حل مشكلة {{now}} أو التواريخ المفقودة
-                    let finalDate;
-                    if (!dateStr || dateStr.includes("{{now}}")) {
-                        finalDate = new Date(); // استخدم تاريخ اللحظة إذا كان التوقيت غير معروف
-                    } else {
-                        finalDate = new Date(dateStr);
-                    }
-
-                    postsData.push({
-                        title: title.trim(),
-                        date: finalDate,
-                        dateDisplay: finalDate.toLocaleString('ar-EG', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
-                        avatar: avatar.trim(),
-                        image: image ? image.trim() : null,
-                        body
-                    });
-                }
-
-                // الترتيب: الأحدث فوق
-                postsData.sort((a, b) => b.date - a.date);
-
-                dynamicContainer.innerHTML = ""; 
-                postsData.forEach(post => {
-                    const postHtml = `
-                        <div class="post">
-                            <div class="post-header">
-                                <img src="${post.avatar}" class="avatar" onerror="this.src='zaidpfp.jpeg'">
-                                <div class="author-info">
-                                    <span class="author-name">${post.title}</span>
-                                    <span class="post-date">${post.dateDisplay}</span>
+                dynamicContainer.innerHTML = ''; 
+                for (const file of files) {
+                    if (file.name.endsWith('.json')) {
+                        const res = await fetch(file.download_url);
+                        const post = await res.json();
+                        const postHtml = `
+                            <div class="post">
+                                <div class="post-header">
+                                    <img src="${post.avatar || 'zaidpfp.jpeg'}" class="avatar" onerror="this.src='zaidpfp.jpeg'">
+                                    <div class="author-info">
+                                        <span class="author-name">${post.author || 'Zaid'}</span>
+                                        <span class="post-date">${post.date || ''}</span>
+                                    </div>
                                 </div>
+                                <div class="post-text">${post.body}</div>
+                                ${post.image ? `<img src="${post.image}" class="post-image">` : ''}
                             </div>
-                            <div class="post-text">${post.body}</div>
-                            ${post.image ? `<img src="${post.image}" class="post-image">` : ""}
-                        </div>
-                    `;
-                    dynamicContainer.innerHTML += postHtml;
-                });
-
+                        `;
+                        dynamicContainer.innerHTML += postHtml;
+                    }
+                }
             } catch (error) {
                 console.error("Error:", error);
                 document.getElementById('loading-msg').innerText = "فشل تحميل المنشورات.";
             }
         }
         fetchDynamicPosts();
+
+        // برمجة تشغيل الصوت
+        const audio = document.getElementById('background-audio');
+        const playBtn = document.getElementById('play-pause-btn');
+        const progressBar = document.getElementById('progress-bar');
+
+        function startMusic() {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    playBtn.innerText = "⏸";
+                }).catch(e => console.log("بانتظار تفاعل المستخدم..."));
+            }
+        }
+
+        // يشتغل مع أول سكرول أو لمسة
+        ['click', 'touchstart', 'scroll'].forEach(evt => {
+            window.addEventListener(evt, startMusic, { once: true });
+        });
+
+        // تحكم يدوي بالزر
+        playBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerText = "⏸";
+            } else {
+                audio.pause();
+                playBtn.innerText = "▶";
+            }
+        });
+
+        // تحديث شريط التقدم الأبيض
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                progressBar.style.width = progress + "%";
+            }
+        });
     </script>
 </body>
 </html>
