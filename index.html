@@ -135,44 +135,60 @@
             try {
                 const response = await fetch(apiUrl);
                 if (!response.ok) throw new Error();
-                let files = await response.json();
+                const files = await response.json();
                 
-                dynamicContainer.innerHTML = "";
-
-                // الترتيب: الأحدث أولاً بناءً على اسم الملف
-                files.sort((a, b) => b.name.localeCompare(a.name));
-
-                for (const file of files) {
-                    if (file.name.endsWith(".md")) {
+                // جلب محتويات جميع الملفات لترتيبها حسب التاريخ الداخلي
+                const postsPromises = files
+                    .filter(file => file.name.endsWith(".md"))
+                    .map(async file => {
                         const postRes = await fetch(file.download_url);
                         const content = await postRes.text();
-
+                        
                         // استخراج البيانات من الـ Frontmatter
                         const title = content.match(/title: "(.*)"/)?.[1] || content.match(/title: (.*)/)?.[1];
-                        const date = content.match(/date: (.*)/)?.[1];
-                        const avatar = content.match(/avatar: (.*)/)?.[1]; // سحب الأفاتار الجديد
-                        const image = content.match(/image: (.*)/)?.[1];   // سحب صورة البوست
+                        const dateStr = content.match(/date: (.*)/)?.[1];
+                        const avatar = content.match(/avatar: (.*)/)?.[1];
+                        const image = content.match(/image: (.*)/)?.[1];
                         const body = content.split("---").pop().trim();
 
-                        const postHtml = `
-                            <div class="post">
-                                <div class="post-header">
-                                    <img src="${avatar || 'zaidpfp.jpeg'}" class="avatar" alt="pfp">
-                                    <div class="author-info">
-                                        <span class="author-name">${title}</span>
-                                        <span class="post-date">${date || ""}</span>
-                                    </div>
+                        return {
+                            title,
+                            date: new Date(dateStr), // تحويل النص لتاريخ حقيقي للترتيب
+                            dateDisplay: dateStr,
+                            avatar,
+                            image,
+                            body
+                        };
+                    });
+
+                let allPosts = await Promise.all(postsPromises);
+
+                // ترتيب المنشورات: الأحدث (التاريخ الأكبر) أولاً
+                allPosts.sort((a, b) => b.date - a.date);
+
+                dynamicContainer.innerHTML = ""; // مسح رسالة التحميل
+
+                allPosts.forEach(post => {
+                    const postHtml = `
+                        <div class="post">
+                            <div class="post-header">
+                                <img src="${post.avatar || 'zaidpfp.jpeg'}" class="avatar" alt="pfp">
+                                <div class="author-info">
+                                    <span class="author-name">${post.title}</span>
+                                    <span class="post-date">${post.dateDisplay || ""}</span>
                                 </div>
-                                <div class="post-text">${body}</div>
-                                ${image ? `<img src="${image}" class="post-image" alt="post image">` : ""}
                             </div>
-                        `;
-                        dynamicContainer.innerHTML += postHtml;
-                    }
-                }
+                            <div class="post-text">${post.body}</div>
+                            ${post.image ? `<img src="${post.image}" class="post-image" alt="post image">` : ""}
+                        </div>
+                    `;
+                    dynamicContainer.innerHTML += postHtml;
+                });
+
             } catch (error) {
                 console.error("Error loading posts:", error);
-                if(document.getElementById('loading-msg')) document.getElementById('loading-msg').innerText = "فشل تحميل المنشورات.";
+                if(document.getElementById('loading-msg')) 
+                    document.getElementById('loading-msg').innerText = "فشل تحميل المنشورات.";
             }
         }
 
