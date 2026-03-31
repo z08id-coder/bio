@@ -4,15 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>لوحة تحكم Zaid</title>
-  </head>
+</head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-
   <script>
-    // كود إضافي للتأكد من أن اللوحة تعمل مباشرة مع GitHub
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log("Admin Panel is running via GitHub Pages");
-    });
+    // هاد الكود بيجبر اللوحة تستخدم البوابة الخارجية غصب عنها
+    window.CMS_CONFIG = {
+      backend: {
+        name: 'github',
+        repo: 'z08id-coder/bio',
+        branch: 'main',
+        auth_endpoint: 'https://static-cms-auth.vercel.app/api/auth'
+      }
+    };
   </script>
 </body>
 </html>
