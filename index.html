@@ -1,158 +1,12 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zaid & Friends</title>
-    <style>
-        /* الأساسيات */
-        body {
-            background-color: #0d1117;
-            color: #c9d1d9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 500px;
-            width: 100%;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            margin-top: 20px;
-        }
-
-        header h1 {
-            font-size: 1.8rem;
-            color: #ffffff;
-            margin-bottom: 5px;
-        }
-
-        .post {
-            background-color: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: 0.3s;
-        }
-
-        .post:hover {
-            border-color: #58a6ff;
-        }
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #30363d;
-            background-color: #0d1117;
-        }
-
-        .author-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .author-name {
-            font-weight: bold;
-            color: #f0f6fc;
-            font-size: 1rem;
-        }
-
-        .post-date {
-            font-size: 0.75rem;
-            color: #8b949e;
-        }
-
-        .post-text {
-            line-height: 1.6;
-            font-size: 1.05rem;
-            color: #e6edf3;
-            white-space: pre-wrap;
-        }
-
-        .post-image {
-            width: 100%;
-            border-radius: 8px;
-            margin-top: 15px;
-            border: 1px solid #30363d;
-        }
-
-        footer {
-            margin-top: 50px;
-            font-size: 0.8rem;
-            color: #484f58;
-        }
-        
-        #loading-msg {
-            text-align: center;
-            color: #8b949e;
-            font-size: 0.9rem;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <header>
-            <h1>Zaid & Friends</h1>
-        </header>
-
-        <div id="posts-container">
-            <div id="dynamic-posts">
-                <p id="loading-msg">جاري تحميل منشورات الأصدقاء الجديدة...</p>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        © 2026 from zaid
-    </footer>
-
-    <script>
-      async function fetchDynamicPosts() {
-            const dynamicContainer = document.getElementById('dynamic-posts');
-            const repoOwner = "z08id-coder"; 
-            const repoName = "bio";
-            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/_posts`;
-
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error();
-                let files = await response.json();
-                
-                // الترتيب الأحدث فوق: بنرتب الملفات أبجدياً عكسياً (بناءً على تاريخ التسمية)
-                files.sort((a, b) => b.name.localeCompare(a.name));
-
-                dynamicContainer.innerHTML = ""; 
-
-                for (const file of files) {
+for (const file of files) {
                     if (file.name.endsWith(".md")) {
                         const postRes = await fetch(file.download_url);
                         const content = await postRes.text();
                         
-                        // استخراج البيانات باستخدام Regex
                         const title = content.match(/title: "(.*)"/)?.[1] || content.match(/title: (.*)/)?.[1];
                         const dateStr = content.match(/date: (.*)/)?.[1];
                         const avatar = content.match(/avatar: (.*)/)?.[1];
                         const image = content.match(/image: (.*)/)?.[1];
-                        
-                        // فصل المحتوى (Body) عن الـ Front Matter
                         const body = content.split("---").pop().trim();
 
                         const postHtml = `
@@ -168,18 +22,7 @@
                                 ${image ? `<img src="${image}" class="post-image" alt="post image">` : ""}
                             </div>
                         `;
-                        dynamicContainer.innerHTML += postHtml;
+                        // السطر الذهبي اللي بقلب الموازين:
+                        dynamicContainer.insertAdjacentHTML('afterbegin', postHtml);
                     }
                 }
-            } catch (error) {
-                console.error("Error:", error);
-                if(document.getElementById('loading-msg')) 
-                    document.getElementById('loading-msg').innerText = "فشل تحميل المنشورات.";
-            }
-        }
-
-        // تشغيل الدالة فور تحميل الصفحة
-        fetchDynamicPosts();
-    </script>
-</body>
-</html>
