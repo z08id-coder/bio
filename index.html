@@ -126,7 +126,7 @@
     </footer>
 
     <script>
-       async function fetchDynamicPosts() {
+      async function fetchDynamicPosts() {
             const dynamicContainer = document.getElementById('dynamic-posts');
             const repoOwner = "z08id-coder"; 
             const repoName = "bio";
@@ -137,8 +137,7 @@
                 if (!response.ok) throw new Error();
                 let files = await response.json();
                 
-                // الترتيب الأبجدي العكسي لأسماء الملفات
-                // بما أن اللوحة تسمي الملفات بالتاريخ تلقائياً، العكسي يعني الأحدث فوق
+                // الترتيب الأبجدي العكسي لأسماء الملفات (الأحدث فوق تلقائياً)
                 files.sort((a, b) => b.name.localeCompare(a.name));
 
                 dynamicContainer.innerHTML = ""; 
@@ -160,7 +159,7 @@
                                     <img src="${avatar || 'zaidpfp.jpeg'}" class="avatar" alt="pfp">
                                     <div class="author-info">
                                         <span class="author-name">${title}</span>
-                                        <span class="post-date">${dateStr || ""}</span>
+                                        <span class="post-date">${dateStr ? dateStr.split('T')[0] : ""}</span>
                                     </div>
                                 </div>
                                 <div class="post-text">${body}</div>
