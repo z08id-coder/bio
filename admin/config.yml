@@ -1,18 +1,27 @@
 backend:
   name: git-gateway
-  repo: z08id-coder/bio # تأكد أن هذا هو اسم حسابك والمستودع الصحيح
+  repo: z08id-coder/bio
   branch: main
 
-media_folder: "images" # الصور التي ترفعها ستخزن هنا
+media_folder: "images"
 public_folder: "images"
 
 collections:
   - name: "posts"
     label: "البوستات"
-    folder: "_posts" # هنا سيتم تخزين النصوص
+    folder: "_posts"
     create: true
     fields:
       - {label: "اسم الشخص", name: "title", widget: "string"}
-      - {label: "التاريخ", name: "date", widget: "datetime"}
+      # تعديل التاريخ هنا ليظهر بتنسيق بسيط ونظيف
+      - {
+          label: "التاريخ", 
+          name: "date", 
+          widget: "datetime", 
+          date_format: "DD/MM/YYYY", 
+          time_format: "hh:mm A", 
+          format: "YYYY-MM-DD HH:mm",
+          picker_utc: false
+        }
       - {label: "الصورة الشخصية", name: "image", widget: "image"}
       - {label: "نص المنشور", name: "body", widget: "markdown"}
