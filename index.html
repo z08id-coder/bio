@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zaid & Friends</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <style>
         /* الأساسيات */
         body {
-            background-color: #0d1117; /* أسود هادئ (نظام جيت هاب) */
+            background-color: #0d1117;
             color: #c9d1d9;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -22,7 +23,6 @@
             width: 100%;
         }
 
-        /* الهيدر (رأس الصفحة) */
         header {
             text-align: center;
             margin-bottom: 40px;
@@ -40,7 +40,6 @@
             color: #8b949e;
         }
 
-        /* تنسيق المنشور (Post) */
         .post {
             background-color: #161b22;
             border: 1px solid #30363d;
@@ -51,10 +50,9 @@
         }
 
         .post:hover {
-            border-color: #58a6ff; /* توهج أزرق خفيف عند اللمس */
+            border-color: #58a6ff;
         }
 
-        /* تنسيق الأفاتار والاسم */
         .post-header {
             display: flex;
             align-items: center;
@@ -66,7 +64,7 @@
             width: 45px;
             height: 45px;
             border-radius: 50%;
-            object-fit: cover; /* هاد السطر اللي بحل مشكلة القياسات */
+            object-fit: cover;
             border: 2px solid #30363d;
             background-color: #0d1117;
         }
@@ -87,15 +85,13 @@
             color: #8b949e;
         }
 
-        /* نص المنشور */
         .post-text {
             line-height: 1.6;
             font-size: 1.05rem;
             color: #e6edf3;
-            white-space: pre-wrap; /* عشان يحافظ على الفراغات والأسطر */
+            white-space: pre-wrap;
         }
 
-        /* الفوتر */
         footer {
             margin-top: 50px;
             font-size: 0.8rem;
@@ -107,52 +103,59 @@
 
     <div class="container">
         <header>
-
             <h1>Zaid & Friends</h1>
-            <p></p>
         </header>
-<div class="post">
-    <div class="post-header">
-        <img src="mottazpfp.jpg" class="avatar" alt="الاسم">
-        <div class="author-info">
-            <span class="author-name">motaz </span>
-            <span class="post-date">31/3/2026</span>
-        </div>
-    </div>
-    <div class="post-text">
-        devil
-    </div>
-</div>
-        <div class="post">
-    <div class="post-header">
-        <img src="ownpfp.jpeg" class="avatar" alt="الاسم">
-        <div class="author-info">
-            <span class="author-name">owen</span>
-            <span class="post-date">3/31/2026</span>
-        </div>
-    </div>
-    <div class="post-text">
-       Fuck society 
-    </div>
-</div>
-        <div class="post">
-            <div class="post-header">
-                <img src="zaidpfp.jpeg" class="avatar" alt="Friend">
-                <div class="author-info">
-                    <span class="author-name">zaid</span>
-                    <span class="post-date">Mar 30, 2026</span>
-                </div>
-            </div>
-            <div class="post-text">
-             يخلف عل كودر بس 
-            </div>
-        </div>
 
+        <div id="posts-container">
+            <div class="post">
+                <div class="post-header">
+                    <img src="mottazpfp.jpg" class="avatar" alt="الاسم">
+                    <div class="author-info">
+                        <span class="author-name">motaz</span>
+                        <span class="post-date">31/3/2026</span>
+                    </div>
+                </div>
+                <div class="post-text">devil</div>
+            </div>
+            
+            <div class="post">
+                <div class="post-header">
+                    <img src="ownpfp.jpeg" class="avatar" alt="الاسم">
+                    <div class="author-info">
+                        <span class="author-name">owen</span>
+                        <span class="post-date">3/31/2026</span>
+                    </div>
+                </div>
+                <div class="post-text">Fuck society</div>
+            </div>
+
+            <div class="post">
+                <div class="post-header">
+                    <img src="zaidpfp.jpeg" class="avatar" alt="Friend">
+                    <div class="author-info">
+                        <span class="author-name">zaid</span>
+                        <span class="post-date">Mar 30, 2026</span>
+                    </div>
+                </div>
+                <div class="post-text">يخلف عل كودر بس</div>
+            </div>
+        </div>
     </div>
 
     <footer>
         © 2026 from zaid
     </footer>
 
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
+    </script>
 </body>
 </html>
