@@ -151,6 +151,21 @@ body {
       ext: '.svg'
     });
   }
-</script>   
+</script>
+    <script>
+  // هاد الكود بيراقب أي تغيير بالصفحة (زي لما البوستات تتحمل) وبحول الإيموجيات فوراً
+  const observer = new MutationObserver(() => {
+    twemoji.parse(document.body, {
+      folder: 'svg',
+      ext: '.svg'
+    });
+  });
+
+  // بنحكي للمراقب يبلش يراقب كل شي بالصفحة
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  // تفعيل أولي عشان إذا في شي جاهز
+  window.onload = () => twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+</script>
 </body>
 </html>
