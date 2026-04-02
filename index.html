@@ -138,5 +138,13 @@ body {
         }
         fetchDynamicPosts();
     </script>
+ <script>
+  window.onload = function() {
+    twemoji.parse(document.body, {
+      folder: 'svg',
+      ext: '.svg'
+    });
+  }
+</script>   
 </body>
 </html>
