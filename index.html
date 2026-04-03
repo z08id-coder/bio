@@ -1,109 +1,171 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+    <script src="https://unpkg.com/twemoji@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KPM9RH2MP5"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-KPM9RH2MP5');
+    </script>
+    
+    <meta charset="UTF-8">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zaid | Posts</title>
+    <title>Zaid Note book</title>
     <style>
-        body {
-            background-color: #0d1117;
-            color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
+        img.emoji {
+   height: 1em;
+   width: 1em;
+   margin: 0 .05em 0 .1em;
+   vertical-align: -0.1em;
+}
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
+
+/* هاد السطر بيجبر المتصفح يستخدم ستايل أبل إذا كان متاح أو شبيه فيه */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+                 /* تصميم مشغل الموسيقى - ستايل آيفون */
+        #ios-player {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 320px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px; padding: 12px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+            z-index: 9999; direction: ltr;
         }
-        h1 { font-size: 3rem; margin-bottom: 20px; }
-        #posts-container {
-            width: 80%;
-            max-width: 600px;
-            text-align: center;
-        }
-        .post-card {
-            background: #161b22;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border: 1px solid #30363d;
-            transition: 0.3s;
-        }
-        .post-card:hover { border-color: #58a6ff; }
-        .error-msg { color: #f85149; font-size: 0.9rem; }
-        footer { margin-top: 50px; opacity: 0.5; font-size: 0.8rem; }
-        a { color: #58a6ff; text-decoration: none; }
+        .player-content { display: flex; align-items: center; gap: 12px; }
+        .player-album-art { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
+        .player-info { flex-grow: 1; overflow: hidden; }
+        .player-title { font-weight: 600; font-size: 0.9rem; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .player-sub { font-size: 0.75rem; color: rgba(255, 255, 255, 0.6); }
+        #play-pause-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; }
+        .player-progress-container { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.2); border-radius: 2px; margin-top: 10px; position: relative; }
+        #progress-bar { height: 100%; width: 0%; background: white; border-radius: 2px; }
+        body { background-color: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .container { max-width: 500px; width: 100%; }
+        header { text-align: center; margin-bottom: 40px; margin-top: 20px; }
+        header h1 { font-size: 1.8rem; color: #ffffff; margin-bottom: 5px; }
+        .post { background-color: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 20px; transition: 0.3s; }
+        .post:hover { border-color: #58a6ff; }
+        .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #30363d; background-color: #0d1117; }
+        .author-info { display: flex; flex-direction: column; }
+        .author-name { font-weight: bold; color: #f0f6fc; font-size: 1rem; }
+        .post-date { font-size: 0.75rem; color: #8b949e; }
+        .post-text { line-height: 1.6; font-size: 1.05rem; color: #e6edf3; white-space: pre-wrap; }
+        .post-image { width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid #30363d; }
+        footer { margin-top: 50px; font-size: 0.8rem; color: #484f58; }
+        #loading-msg { text-align: center; color: #8b949e; }
+           /* إخفاء التاريخ حالياً - إذا بدك ترجعه بس احذف هذا السطر */
+.post-date { display: none !important; }
+       
     </style>
 </head>
 <body>
 
-    <h1>Zaid</h1>
-
-    <div id="posts-container">
-        <p id="loading-text">جاري تحميل المنشورات...</p>
+    <div class="container">
+        <header>
+            <h1>Zaid</h1>
+        </header>
+        <div id="dynamic-posts">
+            <p id="loading-msg">جاري تحميل المنشورات وتصحيح التوقيت...</p>
+        </div>
     </div>
 
-    <footer>from zaid 2026 ©</footer>
+    <footer> © 2026 from zaid </footer>
 
     <script>
         async function fetchDynamicPosts() {
-            const postsContainer = document.getElementById('posts-container');
-            const loadingText = document.getElementById('loading-text');
-            
-            // معلومات المستودع تبعك
-            const repoOwner = "z08id-coder";
-            const repoName = "bio";
-            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/_posts`;
+            const dynamicContainer = document.getElementById('dynamic-posts');
+            const apiUrl = `https://api.github.com/repos/z08id-coder/bio/contents/_posts`;
 
             try {
                 const response = await fetch(apiUrl);
-
-                if (!response.ok) {
-                    if (response.status === 403) {
-                        throw new Error("وصلت للحد الأقصى من الطلبات (Rate Limit). جرب من شبكة ثانية أو انتظر قليلاً.");
-                    }
-                    throw new Error(`خطأ في السيرفر: ${response.status}`);
-                }
-
                 const files = await response.json();
+                const mdFiles = files.filter(f => f.name.endsWith(".md"));
+                let postsData = [];
 
-                // التأكد أن البيانات مصفوفة (هذا حل الـ TypeError اللي ظهر عندك)
-                if (Array.isArray(files)) {
-                    const markdownFiles = files.filter(file => file.name.endsWith('.md'));
+                for (const file of mdFiles) {
+                    const postRes = await fetch(file.download_url);
+                    const content = await postRes.text();
+                    
+                    const title = (content.match(/title:\s*["']?(.*?)["']?(\r?\n|$)/))?.[1] || "صديق";
+                    let dateStr = (content.match(/date:\s*(.*?)(\r?\n|$)/))?.[1] || "";
+                    const avatar = (content.match(/avatar:\s*(.*?)(\r?\n|$)/))?.[1] || 'zaidpfp.jpeg';
+                    const image = (content.match(/image:\s*(.*?)(\r?\n|$)/))?.[1] || null;
+                    const body = content.split("---").pop().trim();
 
-                    if (markdownFiles.length === 0) {
-                        postsContainer.innerHTML = "<p>لا يوجد منشورات في مجلد _posts حالياً.</p>";
-                        return;
+                    // حل مشكلة {{now}} أو التواريخ المفقودة
+                    let finalDate;
+                    if (!dateStr || dateStr.includes("{{now}}")) {
+                        finalDate = new Date(); // استخدم تاريخ اللحظة إذا كان التوقيت غير معروف
+                    } else {
+                        finalDate = new Date(dateStr);
                     }
 
-                    postsContainer.innerHTML = ''; // تنظيف الحاوية
-
-                    markdownFiles.forEach(file => {
-                        const postName = file.name.replace('.md', '').replace(/-/g, ' ');
-                        const postElement = document.createElement('div');
-                        postElement.className = 'post-card';
-                        postElement.innerHTML = `
-                            <h3>${postName}</h3>
-                            <a href="${file.html_url}" target="_blank">فتح المنشور ↗</a>
-                        `;
-                        postsContainer.appendChild(postElement);
+                    postsData.push({
+                        title: title.trim(),
+                        date: finalDate,
+                        dateDisplay: finalDate.toLocaleString('ar-EG', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
+                        avatar: avatar.trim(),
+                        image: image ? image.trim() : null,
+                        body
                     });
-                } else {
-                    throw new Error("تنسيق البيانات غير صحيح.");
                 }
+
+                // الترتيب: الأحدث فوق
+                postsData.sort((a, b) => b.date - a.date);
+
+                dynamicContainer.innerHTML = ""; 
+                postsData.forEach(post => {
+                    const postHtml = `
+                        <div class="post">
+                            <div class="post-header">
+                                <img src="${post.avatar}" class="avatar" onerror="this.src='zaidpfp.jpeg'">
+                                <div class="author-info">
+                                    <span class="author-name">${post.title}</span>
+                                    <span class="post-date">${post.dateDisplay}</span>
+                                </div>
+                            </div>
+                            <div class="post-text">${post.body}</div>
+                            ${post.image ? `<img src="${post.image}" class="post-image">` : ""}
+                        </div>
+                    `;
+                    dynamicContainer.innerHTML += postHtml;
+                });
 
             } catch (error) {
                 console.error("Error:", error);
-                postsContainer.innerHTML = `
-                    <p class="error-msg">فشل تحميل المنشورات.</p>
-                    <p style="font-size: 0.7rem; opacity: 0.6;">السبب: ${error.message}</p>
-                `;
+                document.getElementById('loading-msg').innerText = "فشل تحميل المنشورات.";
             }
         }
-
-        // تشغيل الدالة
         fetchDynamicPosts();
     </script>
+ <script>
+  window.onload = function() {
+    twemoji.parse(document.body, {
+      folder: 'svg',
+      ext: '.svg'
+    });
+  }
+</script>
+    <script>
+  // هاد الكود بيراقب أي تغيير بالصفحة (زي لما البوستات تتحمل) وبحول الإيموجيات فوراً
+  const observer = new MutationObserver(() => {
+    twemoji.parse(document.body, {
+      folder: 'svg',
+      ext: '.svg'
+    });
+  });
+
+  // بنحكي للمراقب يبلش يراقب كل شي بالصفحة
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  // تفعيل أولي عشان إذا في شي جاهز
+  window.onload = () => twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+</script>
 </body>
 </html>
