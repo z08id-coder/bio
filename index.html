@@ -13,30 +13,48 @@
     </script>
     
     <meta charset="UTF-8">
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zaid Note book</title>
     <style>
         img.emoji {
-   height: 1em;
-   width: 1em;
-   margin: 0 .05em 0 .1em;
-   vertical-align: -0.1em;
-}
+            height: 1em;
+            width: 1em;
+            margin: 0 .05em 0 .1em;
+            vertical-align: -0.1em;
+        }
+
         @import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
 
-/* هاد السطر بيجبر المتصفح يستخدم ستايل أبل إذا كان متاح أو شبيه فيه */
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-}
-                 /* تصميم مشغل الموسيقى - ستايل آيفون */
-        #ios-player {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 320px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px; padding: 12px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
-            z-index: 9999; direction: ltr;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            background: linear-gradient(160deg, #020408 0%, #0a1628 50%, #0d1f3c 100%);
+            min-height: 100vh;
+            color: #cde4f5;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
         }
+
+        /* تصميم مشغل الموسيقى - ستايل آيفون */
+        #ios-player {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 320px;
+            background: rgba(30, 100, 180, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(30, 100, 180, 0.3);
+            border-radius: 20px;
+            padding: 12px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            direction: ltr;
+        }
+
         .player-content { display: flex; align-items: center; gap: 12px; }
         .player-album-art { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
         .player-info { flex-grow: 1; overflow: hidden; }
@@ -44,25 +62,49 @@ body {
         .player-sub { font-size: 0.75rem; color: rgba(255, 255, 255, 0.6); }
         #play-pause-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; }
         .player-progress-container { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.2); border-radius: 2px; margin-top: 10px; position: relative; }
-        #progress-bar { height: 100%; width: 0%; background: white; border-radius: 2px; }
-        body { background-color: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        #progress-bar { height: 100%; width: 0%; background: #60a5fa; border-radius: 2px; }
+
         .container { max-width: 500px; width: 100%; }
+
         header { text-align: center; margin-bottom: 40px; margin-top: 20px; }
-        header h1 { font-size: 1.8rem; color: #ffffff; margin-bottom: 5px; }
-        .post { background-color: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 20px; transition: 0.3s; }
-        .post:hover { border-color: #58a6ff; }
+        header h1 { font-size: 1.8rem; color: #93c5fd; margin-bottom: 5px; }
+
+        .post {
+            background-color: rgba(10, 22, 40, 0.7);
+            border: 1px solid #1e3a5f;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .post:hover { border-color: #60a5fa; }
+
         .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #30363d; background-color: #0d1117; }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #1e3a5f;
+            background-color: #050d18;
+        }
+
         .author-info { display: flex; flex-direction: column; }
-        .author-name { font-weight: bold; color: #f0f6fc; font-size: 1rem; }
-        .post-date { font-size: 0.75rem; color: #8b949e; }
-        .post-text { line-height: 1.6; font-size: 1.05rem; color: #e6edf3; white-space: pre-wrap; }
-        .post-image { width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid #30363d; }
-        footer { margin-top: 50px; font-size: 0.8rem; color: #484f58; }
-        #loading-msg { text-align: center; color: #8b949e; }
-           /* إخفاء التاريخ حالياً - إذا بدك ترجعه بس احذف هذا السطر */
-.post-date { display: none !important; }
-       
+        .author-name { font-weight: bold; color: #eff6ff; font-size: 1rem; }
+
+        .post-date {
+            font-size: 0.75rem;
+            color: #4a6fa0;
+            display: none !important;
+        }
+
+        .post-text { line-height: 1.6; font-size: 1.05rem; color: #dbeafe; white-space: pre-wrap; }
+        .post-image { width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid #1e3a5f; }
+
+        footer { margin-top: 50px; font-size: 0.8rem; color: #1e3a5f; }
+        #loading-msg { text-align: center; color: #4a6fa0; }
     </style>
 </head>
 <body>
@@ -99,10 +141,9 @@ body {
                     const image = (content.match(/image:\s*(.*?)(\r?\n|$)/))?.[1] || null;
                     const body = content.split("---").pop().trim();
 
-                    // حل مشكلة {{now}} أو التواريخ المفقودة
                     let finalDate;
                     if (!dateStr || dateStr.includes("{{now}}")) {
-                        finalDate = new Date(); // استخدم تاريخ اللحظة إذا كان التوقيت غير معروف
+                        finalDate = new Date();
                     } else {
                         finalDate = new Date(dateStr);
                     }
@@ -117,7 +158,6 @@ body {
                     });
                 }
 
-                // الترتيب: الأحدث فوق
                 postsData.sort((a, b) => b.date - a.date);
 
                 dynamicContainer.innerHTML = ""; 
@@ -145,28 +185,20 @@ body {
         }
         fetchDynamicPosts();
     </script>
- <script>
-  window.onload = function() {
-    twemoji.parse(document.body, {
-      folder: 'svg',
-      ext: '.svg'
-    });
-  }
-</script>
+
     <script>
-  // هاد الكود بيراقب أي تغيير بالصفحة (زي لما البوستات تتحمل) وبحول الإيموجيات فوراً
-  const observer = new MutationObserver(() => {
-    twemoji.parse(document.body, {
-      folder: 'svg',
-      ext: '.svg'
-    });
-  });
+        window.onload = function() {
+            twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+        }
+    </script>
 
-  // بنحكي للمراقب يبلش يراقب كل شي بالصفحة
-  observer.observe(document.body, { childList: true, subtree: true });
+    <script>
+        const observer = new MutationObserver(() => {
+            twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+        window.onload = () => twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+    </script>
 
-  // تفعيل أولي عشان إذا في شي جاهز
-  window.onload = () => twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
-</script>
 </body>
 </html>
